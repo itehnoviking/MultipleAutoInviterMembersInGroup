@@ -60,5 +60,27 @@ namespace MultipleAutoInviterMembersInGroup
 
             return result;
         }
+
+        public async Task<string> Method(string a)
+        {
+            string path = Console.ReadLine();
+
+            var dir = new DirectoryInfo(path);
+            foreach (var file in dir.GetFiles())
+            {
+                if (file.Name == a)
+                {
+                    using var reader = new StreamReader($"/{file.FullName}");
+
+                    while (!reader.EndOfStream)
+                    {
+                        yield return await reader.ReadLineAsync();
+                    }
+                    break;
+                }
+            }
+
+
+        }
     }
 }
