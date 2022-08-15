@@ -9,18 +9,21 @@ namespace MultipleAutoIviterMembersInGroup
         {
             static string Config(string what)
             {
+                var logic = new AllLogic();
+
                 switch (what)
                 {
 
-                    case "api_id": Console.Write("API Id: "); return Console.ReadLine();
-                    case "api_hash": Console.Write("API Hash: "); return Console.ReadLine();
-                    case "phone_number": Console.Write("Phone number: "); return Console.ReadLine();
+                    case "api_id": Console.Write("API Id: "); return logic.DataSearchForConfig("api_id");
+                    case "api_hash": Console.Write("API Hash: "); return logic.DataSearchForConfig("api_hash");
+                    case "phone_number": Console.Write("Phone number: "); return logic.DataSearchForConfig("phone_number");
                     case "verification_code": Console.Write("Verification code: "); return Console.ReadLine();  // if sign-up is required
-                    case "password": Console.Write("Password: "); return Console.ReadLine();     // if user has enabled 2FA
-                    case "session_pathname": return Console.ReadLine();
+                    case "password": Console.Write("Password: "); return logic.DataSearchForConfig("password");     // if user has enabled 2FA
+                    case "session_pathname": return logic.DataSearchForConfig("session_pathname");
                     default: return null;                  // let WTelegramClient decide the default config
                 }
             }
+
             var logic = new AllLogic();
             var randomSecundForPause = new Random();
 

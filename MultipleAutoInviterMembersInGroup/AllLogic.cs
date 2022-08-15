@@ -61,26 +61,28 @@ namespace MultipleAutoInviterMembersInGroup
             return result;
         }
 
-        public async Task<string> Method(string a)
+        public string DataSearchForConfig(string a)
         {
+            Console.Write("Enter path in folder: ");
             string path = Console.ReadLine();
+            string data = null;
 
             var dir = new DirectoryInfo(path);
             foreach (var file in dir.GetFiles())
             {
                 if (file.Name == a)
                 {
-                    using var reader = new StreamReader($"/{file.FullName}");
+                    using var reader = new StreamReader($"{file.FullName}");
 
                     while (!reader.EndOfStream)
                     {
-                        yield return await reader.ReadLineAsync();
+                        data = reader.ReadLine();
                     }
                     break;
                 }
+                break;
             }
-
-
+            return data;
         }
     }
 }
