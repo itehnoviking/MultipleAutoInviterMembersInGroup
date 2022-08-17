@@ -7,13 +7,12 @@ namespace MultipleAutoIviterMembersInGroup
     {
         static async Task Main(string[] args)
         {
+
             static string Config(string what)
             {
                 var logic = new AllLogic();
-
                 switch (what)
                 {
-
                     case "api_id": Console.Write("API Id: "); return logic.DataSearchForConfig("api_id");
                     case "api_hash": Console.Write("API Hash: "); return logic.DataSearchForConfig("api_hash");
                     case "phone_number": Console.Write("Phone number: "); return logic.DataSearchForConfig("phone_number");
@@ -37,7 +36,8 @@ namespace MultipleAutoIviterMembersInGroup
                 var myClient = await client.LoginUserIfNeeded();
                 Console.WriteLine($"We are logged-in as {myClient.username ?? myClient.first_name + " " + myClient.last_name} (id {myClient.id})");
 
-                var PATH = "afaf";
+                Console.Write($"Enter the path in file with data for invaiting {myClient.first_name} {myClient.last_name}");
+                var PATH = Console.ReadLine();
 
                 var list = await logic.CreatedThirtyMembersFromListAndSavingBigListInFileAsync(PATH);
                 var dictionary = await logic.TransformListInDictionary(list);
