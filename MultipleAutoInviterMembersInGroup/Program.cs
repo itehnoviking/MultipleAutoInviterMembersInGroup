@@ -13,12 +13,12 @@ namespace MultipleAutoIviterMembersInGroup
                 var logic = new AllLogic();
                 switch (what)
                 {
-                    case "api_id": Console.Write("API Id: "); return logic.DataSearchForConfig("api_id");
-                    case "api_hash": Console.Write("API Hash: "); return logic.DataSearchForConfig("api_hash");
-                    case "phone_number": Console.Write("Phone number: "); return logic.DataSearchForConfig("phone_number");
+                    case "api_id": Console.Write("API Id: "); return logic.DataSearchForConfig("api_id.txt");
+                    case "api_hash": Console.Write("API Hash: "); return logic.DataSearchForConfig("api_hash.txt");
+                    case "phone_number": Console.Write("Phone number: "); return logic.DataSearchForConfig("phone.txt");
                     case "verification_code": Console.Write("Verification code: "); return Console.ReadLine();  // if sign-up is required
-                    case "password": Console.Write("Password: "); return logic.DataSearchForConfig("password");     // if user has enabled 2FA
-                    case "session_pathname": return logic.DataSearchForConfig("session_pathname");
+                    case "password": Console.Write("Password: "); return logic.DataSearchForConfig("password.txt");     // if user has enabled 2FA
+                    case "session_pathname": return logic.DataSearchForConfig("session_pathname.txt");
                     default: return null;                  // let WTelegramClient decide the default config
                 }
             }
@@ -51,12 +51,12 @@ namespace MultipleAutoIviterMembersInGroup
                     {
                         var user = new InputUser(item.Key, item.Value);
                         await client.AddChatUser(channel, user);
-                        Console.WriteLine($"Added in chat user id {user.user_id}");
+                        Console.WriteLine($"{myClient.first_name} {myClient.last_name} Added in chat user id {user.user_id}");
                         Thread.Sleep(randomSecundForPause.Next(100000, 150000));
                     }
-                    catch (Exception)
+                    catch (Exception e)
                     {
-                        Console.WriteLine("Exception");
+                        Console.WriteLine($"{myClient.first_name} {myClient.last_name} has {e.Message}");
                         Thread.Sleep(randomSecundForPause.Next(100000, 150000));
                     }
                 }

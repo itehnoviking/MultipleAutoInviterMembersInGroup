@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TL;
+using WTelegram;
 
 namespace MultipleAutoInviterMembersInGroup
 {
@@ -20,27 +22,16 @@ namespace MultipleAutoInviterMembersInGroup
 
         public async Task<IList<string>> CreatedThirtyMembersFromListAndSavingBigListInFileAsync(string path)
         {
-            var thirtyMembers = new List<string>();
-            var list = GetListWithIdAndHashMembersAsync(path);
+            var list = await GetListWithIdAndHashMembersAsync(path).ToArrayAsync();
 
-            var listEnumerator = list.GetAsyncEnumerator();
+            await using var writer = new StreamWriter(path, false);
 
-            for (int i = 0; i < 30; i++)
+            foreach (var item in list.Skip(30))
             {
-                if (!await listEnumerator.MoveNextAsync())
-                {
-                    break;
-                }
-
-                thirtyMembers.Add(listEnumerator.Current);
+                await writer.WriteLineAsync(item);
             }
 
-            using var writer = new StreamWriter(path, false);
-            while (await listEnumerator.MoveNextAsync())
-            {
-                await writer.WriteLineAsync(listEnumerator.Current);
-            }
-            return thirtyMembers;
+            return list.Take(30).ToList();
         }
 
         public async Task<IDictionary<long, long>> TransformListInDictionary(IList<string> list)
@@ -63,7 +54,7 @@ namespace MultipleAutoInviterMembersInGroup
 
         public string DataSearchForConfig(string a)
         {
-            Console.Write("Enter path in folder: ");
+            Console.Write("Enter path in folder with info for Config: ");
             string path = Console.ReadLine();
             string data = null;
 
@@ -80,9 +71,11 @@ namespace MultipleAutoInviterMembersInGroup
                     }
                     break;
                 }
-                break;
+                continue;
             }
             return data;
         }
+
+        
     }
 }
