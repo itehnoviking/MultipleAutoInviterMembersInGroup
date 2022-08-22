@@ -10,31 +10,37 @@ namespace MultipleAutoInviterMembersInGroup
 {
     class AllLogic
     {
-        public async IAsyncEnumerable<string> GetListWithIdAndHashMembersAsync(string path)
+        public IList<string> GetListWithIdAndHashMembers(string path)
         {
-            using var reader = new StreamReader(path);
-
-            while (!reader.EndOfStream)
+            var list = new List<string>();
+            using (StreamReader reader = new StreamReader(path))
             {
-                yield return await reader.ReadLineAsync();
+                string? line;
+
+                while ((line = reader.ReadLine()) != null)
+                {
+                    list.Add(line);
+                }
+
+                return list;
             }
         }
 
-        public async Task<IList<string>> CreatedThirtyMembersFromListAndSavingBigListInFileAsync(string path)
+        public IList<string> CreatedThirtyMembersFromListAndSavingBigListInFile(string path)
         {
-            var list = await GetListWithIdAndHashMembersAsync(path).ToArrayAsync();
+            var list = GetListWithIdAndHashMembers(path).ToArray();
 
-            await using var writer = new StreamWriter(path, false);
+            using var writer = new StreamWriter(path, false);
 
             foreach (var item in list.Skip(30))
             {
-                await writer.WriteLineAsync(item);
+                writer.WriteLine(item);
             }
 
             return list.Take(30).ToList();
         }
 
-        public async Task<IDictionary<long, long>> TransformListInDictionary(IList<string> list)
+        public IDictionary<long, long> TransformListInDictionary(IList<string> list)
         {
             var result = new Dictionary<long, long>();
             foreach (var member in list)
@@ -44,11 +50,9 @@ namespace MultipleAutoInviterMembersInGroup
                 var key = member.Substring(0, idx);
                 var value = member.Substring(idx + 1);
 
-                // dictionary.TryAdd ?
-                // long.TryParse(key) ?
                 result.Add(Convert.ToInt64(key), Convert.ToInt64(value));
-            }
 
+            }
             return result;
         }
 
@@ -75,7 +79,5 @@ namespace MultipleAutoInviterMembersInGroup
             }
             return data;
         }
-
-        
     }
 }

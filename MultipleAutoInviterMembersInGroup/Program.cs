@@ -7,61 +7,17 @@ namespace MultipleAutoIviterMembersInGroup
     {
         static async Task Main(string[] args)
         {
+            var tasks = new List<Task>();
 
-            static string Config(string what)
+            Console.Write("How many accounts do you need to run? ");
+            for (int i = 0; i < Convert.ToInt32(Console.ReadLine()); i++)
             {
-                var logic = new AllLogic();
-                switch (what)
-                {
-                    case "api_id": Console.Write("API Id: "); return logic.DataSearchForConfig("api_id.txt");
-                    case "api_hash": Console.Write("API Hash: "); return logic.DataSearchForConfig("api_hash.txt");
-                    case "phone_number": Console.Write("Phone number: "); return logic.DataSearchForConfig("phone.txt");
-                    case "verification_code": Console.Write("Verification code: "); return Console.ReadLine();  // if sign-up is required
-                    case "password": Console.Write("Password: "); return logic.DataSearchForConfig("password.txt");     // if user has enabled 2FA
-                    case "session_pathname": return logic.DataSearchForConfig("session_pathname.txt");
-                    default: return null;                  // let WTelegramClient decide the default config
-                }
+                tasks.Add(Task.Run(() => new InviteMashine().RunInviteMashine()));
+                Thread.Sleep(100000);
             }
 
-            var logic = new AllLogic();
-            var randomSecundForPause = new Random();
-
-            Console.Write("number of accounts: ");
-            var variable = Convert.ToInt32(Console.ReadLine());
-
-            for (int i = 0; i < variable; i++)
-            {
-
-                using var client = new WTelegram.Client(Config);
-                var myClient = await client.LoginUserIfNeeded();
-                Console.WriteLine($"We are logged-in as {myClient.username ?? myClient.first_name + " " + myClient.last_name} (id {myClient.id})");
-
-                Console.Write($"Enter the path in file with data for invaiting {myClient.first_name} {myClient.last_name}");
-                var PATH = Console.ReadLine();
-
-                var list = await logic.CreatedThirtyMembersFromListAndSavingBigListInFileAsync(PATH);
-                var dictionary = await logic.TransformListInDictionary(list);
-
-                var chats = await client.Messages_GetAllChats();
-                var channel = chats.chats[1679143523];
-
-                foreach (var item in dictionary)
-                {
-                    try
-                    {
-                        var user = new InputUser(item.Key, item.Value);
-                        await client.AddChatUser(channel, user);
-                        Console.WriteLine($"{myClient.first_name} {myClient.last_name} Added in chat user id {user.user_id}");
-                        Thread.Sleep(randomSecundForPause.Next(100000, 150000));
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine($"{myClient.first_name} {myClient.last_name} has {e.Message}");
-                        Thread.Sleep(randomSecundForPause.Next(100000, 150000));
-                    }
-                }
-
-            }
+            await Task.WhenAll(tasks);
         }
     }
 }
+
