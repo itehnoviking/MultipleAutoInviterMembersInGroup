@@ -10,7 +10,8 @@ namespace MultipleAutoIviterMembersInGroup
             var tasks = new List<Task>();
 
             Console.Write("How many accounts do you need to run? ");
-            for (int i = 0; i < Convert.ToInt32(Console.ReadLine()); i++)
+            var amountAccounts = Convert.ToInt32(Console.ReadLine());
+            for (int i = 0; i < amountAccounts; i++)
             {
                 tasks.Add(Task.Run(() => new InviteMashine().RunInviteMashine()));
                 Thread.Sleep(100000);

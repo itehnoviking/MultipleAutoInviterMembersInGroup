@@ -9,7 +9,7 @@ namespace MultipleAutoInviterMembersInGroup
 {
     class InviteMashine
     {
-        public string Config(string what)
+        private string Config(string what)
         {
             switch (what)
             {

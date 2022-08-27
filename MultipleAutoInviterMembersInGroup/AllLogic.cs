@@ -10,7 +10,7 @@ namespace MultipleAutoInviterMembersInGroup
 {
     class AllLogic
     {
-        public IList<string> GetListWithIdAndHashMembers(string path)
+        private IList<string> GetListWithIdAndHashMembers(string path)
         {
             var list = new List<string>();
             using (StreamReader reader = new StreamReader(path))
